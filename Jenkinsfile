@@ -1,10 +1,25 @@
 pipeline {
-agent any
-stages {
-stage('Install dependencies') {
-steps {
-sh 'npm install’
-}
-}
-}
+    agent any
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/allikvaleria/jenkins2.git', branch: 'master'
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+        
+        stage('Run Application') {
+            steps {
+                sh 'node app.js &'
+                sh 'sleep 5'
+                sh 'curl http://localhost:3000'
+            }
+        }
+    }
 }
